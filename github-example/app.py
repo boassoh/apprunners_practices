@@ -10,8 +10,3 @@ def home():
 @app.route('/health')
 def health():
     return {'status': 'healthy'}
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT'))
-    print(f"Starting Flask app on port {port}")
-    app.run(host='0.0.0.0', port=port)
