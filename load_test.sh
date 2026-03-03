@@ -12,36 +12,59 @@ if [ -z "$URL" ]; then
 fi
 
 echo "🚀 Iniciando prueba de carga..."
-echo "📊 Configuración: 5 requests concurrentes por instancia, máximo 3 instancias"
+echo "📊 Objetivo: Escalar de 1 a 3 instancias"
 echo "🎯 URL: $URL"
 echo "⏱️  Duración: 5 minutos"
 echo ""
 
 # Función para enviar requests continuos
 send_requests() {
+    local worker_id=$1
+    local count=0
+    local success=0
+    local errors=0
     local end_time=$((SECONDS + 300))
+    
     while [ $SECONDS -lt $end_time ]; do
-        curl -s "$URL" > /dev/null &
-        sleep 0.1
+        response=$(curl -s -o /dev/null -w "%{http_code}" "$URL" 2>/dev/null)
+        ((count++))
+        
+        if [ "$response" = "200" ]; then
+            ((success++))
+        else
+            ((errors++))
+        fi
+        
+        # Mostrar progreso cada 20 requests
+        if [ $((count % 20)) -eq 0 ]; then
+            echo "[Worker $worker_id] $count requests | ✓ $success | ✗ $errors"
+        fi
+        
+        sleep 0.3
     done
+    
+    echo "[Worker $worker_id] Completado: $count total | ✓ $success | ✗ $errors"
 }
 
-echo "⏳ Enviando requests concurrentes durante 5 minutos..."
-echo "📈 Abre la consola de App Runner ahora para observar el escalado"
+echo "⏳ Iniciando 25 workers concurrentes..."
+echo "📈 Abre App Runner Console AHORA para ver el escalado en tiempo real"
+echo ""
+echo "Esperando 3 segundos antes de iniciar..."
+sleep 3
 echo ""
 
-# Iniciar 15 procesos concurrentes enviando requests
-for i in {1..15}; do
-    send_requests &
+# Iniciar 25 workers (suficiente para forzar 3 instancias con sleep(1))
+for i in {1..25}; do
+    send_requests $i &
 done
 
-# Esperar a que terminen todos los procesos
+# Esperar a que terminen
 wait
 
 echo ""
 echo "✅ Prueba completada"
 echo ""
-echo "📊 Verifica en la consola de App Runner:"
-echo "   - Número de instancias activas (debería haber escalado a 3)"
-echo "   - Métricas de 'Active instances' en CloudWatch"
-echo "   - Logs de la aplicación"
+echo "📊 Verifica en App Runner Console:"
+echo "   - Active instances debería mostrar 3"
+echo "   - CloudWatch Metrics > ActiveInstances"
+echo "   - Logs para ver requests procesados"

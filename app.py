@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 def home():
     # Simular procesamiento para pruebas de carga
-    time.sleep(2)
+    time.sleep(1)
     return render_template('index.html', 
                          timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
                          hostname=os.environ.get('HOSTNAME', 'unknown'))
