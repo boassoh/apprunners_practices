@@ -1,22 +1,17 @@
-from flask import Flask, render_template
+from flask import Flask
 import os
-from datetime import datetime
-import time
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    # Simular procesamiento para pruebas de carga
-    time.sleep(1)
-    return render_template('index.html', 
-                         timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                         hostname=os.environ.get('HOSTNAME', 'unknown'))
+    return 'Hello from App Runner!'
 
 @app.route('/health')
 def health():
-    return {'status': 'healthy', 'timestamp': datetime.now().isoformat()}
+    return {'status': 'healthy'}
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT'))
+    print(f"Starting Flask app on port {port}")
     app.run(host='0.0.0.0', port=port)
