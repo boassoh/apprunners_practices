@@ -53,11 +53,6 @@ docker push <account-id>.dkr.ecr.<region>.amazonaws.com/edem-app:latest
 ```
 
 > **Evidencia de éxito:** La imagen aparecerá en el repositorio ECR con el tag `latest`.
-```bash
-docker push <account-id>.dkr.ecr.<region>.amazonaws.com/edem-app:latest
-```
-
-> **Evidencia de éxito:** La imagen aparecerá en el repositorio ECR con el tag `latest`.
 
 ---
 
