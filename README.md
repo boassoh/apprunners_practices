@@ -4,41 +4,6 @@ Este ejercicio práctico cubre el ciclo completo de containerización y desplieg
 
 ---
 
-## 🧪 Fase 0: Prueba Local (Opcional)
-
-**Objetivo:** Verificar que la aplicación funciona antes de containerizar.
-
-### 0.1. Crear Entorno Virtual
-
-**Linux/Mac:**
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-**Windows:**
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-### 0.2. Instalar Dependencias y Ejecutar
-```bash
-pip install -r requirements.txt
-python app.py
-```
-
-### 0.3. Verificar
-Abrir **http://localhost:8080** en el navegador.
-
-### 0.4. Detener
-```bash
-# Ctrl+C para detener
-deactivate  # Desactivar venv
-```
-
----
-
 ## 🐳 Fase 1: Containerización y ECR
 
 **Objetivo:** Crear una imagen Docker y subirla a Amazon ECR.
